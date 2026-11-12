@@ -1,0 +1,2634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAPICÚA STUDIO — Santiago, DR / New Jersey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,700;0,900;1,900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4F2ED;
+    --text: #111111;
+    --red: #B3261E;
+    --blue: #1F3F8F;
+    --gray: #888;
+    --light-gray: #D8D4CC;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ─── CUSTOM CURSOR ─── */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--text);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--text);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.25s cubic-bezier(.25,.46,.45,.94), width 0.3s, height 0.3s, border-color 0.3s, opacity 0.3s;
+    opacity: 0.6;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* ─── LOADER · INTRO CAPICÚA ─── */
+  #loader {
+    position: fixed; inset: 0; z-index: 9000;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: auto; overflow: hidden;
+    --u: clamp(40px, min(10.2vw, 14vh), 128px);
+    --cream: #F2E6CC;
+  }
+  #loader.hidden { visibility: hidden; pointer-events: none; }
+  .ld-panel { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--blue); will-change: transform; }
+  .ld-panel::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 100%, rgba(255,255,255,0.07), transparent 65%); }
+  .ld-top { top: 0; }
+  .ld-bot { bottom: 0; }
+  .ld-bot::after { background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.07), transparent 65%); }
+  .ld-seam { position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: var(--cream); transform: scaleX(0); opacity: 0; }
+  .ld-stage { position: relative; display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 0.32); will-change: transform; }
+  .ld-row { position: relative; display: flex; align-items: center; gap: calc(var(--u) * 0.32); }
+  .ld-slot { width: var(--u); height: var(--u); flex: none; }
+  .ld-word { display: flex; font-family: 'Montserrat', sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase;
+    font-size: calc(var(--u) * 1.08); padding: 0 0.06em 0 0.1em; line-height: 1; letter-spacing: -0.03em; color: var(--cream); }
+  .ld-word span { display: inline-block; opacity: 0; }
+  .ld-tile { position: absolute; left: 50%; top: 50%; width: var(--u); height: calc(var(--u) * 2); margin: calc(var(--u) * -1) 0 0 calc(var(--u) * -0.5);
+    opacity: 0; will-change: transform; }
+  .ld-half { position: absolute; left: 0; width: var(--u); height: var(--u); background: var(--cream);
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 1fr); padding: 16% 18%; place-items: center;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.12); will-change: transform; }
+  .ld-half.a { top: 0; border-radius: 14% 14% 0 0; }
+  .ld-half.b { top: var(--u); border-radius: 0 0 14% 14%; }
+  .ld-half i { width: 62%; aspect-ratio: 1; border-radius: 50%; background: var(--blue); transform: scale(0); }
+  .ld-bar { position: absolute; left: 14%; right: 14%; top: calc(var(--u) - 2px); height: 4px; border-radius: 2px; background: var(--blue); z-index: 2; }
+  .ld-ring { position: absolute; left: 50%; top: 50%; width: calc(var(--u) * 2.4); height: calc(var(--u) * 2.4); margin: calc(var(--u) * -1.2) 0 0 calc(var(--u) * -1.2);
+    border: 2px solid var(--cream); border-radius: 50%; opacity: 0; pointer-events: none; }
+  .ld-studio { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: calc(var(--u) * 0.3); letter-spacing: 0.9em; margin-right: -0.9em;
+    color: var(--cream); text-transform: uppercase; opacity: 0; }
+  .ld-cities { display: flex; align-items: center; gap: 0.9rem; font-family: 'DM Sans', sans-serif; font-size: clamp(0.6rem, calc(var(--u) * 0.16), 1rem);
+    letter-spacing: 0.24em; text-transform: uppercase; color: rgba(242,230,204,0.75); white-space: nowrap; }
+  .ld-cities .l, .ld-cities .r { opacity: 0; display: inline-block; }
+  .ld-mid { position: relative; width: clamp(40px, 12vw, 90px); height: 2px; }
+  .ld-mid b { position: absolute; inset: 0; background: var(--red); transform: scaleX(0); }
+  .ld-mid em { position: absolute; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%; background: var(--cream); opacity: 0; }
+  .ld-mid em:first-of-type { left: -3px; } .ld-mid em:last-of-type { right: -3px; }
+  .ld-hint { position: absolute; bottom: 2.2rem; left: 0; right: 0; text-align: center; font-family: 'DM Sans', sans-serif; font-size: 0.6rem;
+    letter-spacing: 0.3em; text-transform: uppercase; color: rgba(242,230,204,0.35); opacity: 0; transition: opacity .6s; }
+  #loader.can-skip .ld-hint { opacity: 1; }
+
+  /* ─── GRAIN OVERLAY ─── */
+  .grain {
+    position: fixed;
+    inset: -50%;
+    width: 200%; height: 200%;
+    pointer-events: none;
+    z-index: 8000;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px;
+    animation: grain 0.4s steps(1) infinite;
+  }
+  @keyframes grain {
+    0%,100%{transform:translate(0,0)}
+    10%{transform:translate(-2%,-3%)}
+    20%{transform:translate(3%,2%)}
+    30%{transform:translate(-1%,4%)}
+    40%{transform:translate(4%,-1%)}
+    50%{transform:translate(-3%,2%)}
+    60%{transform:translate(1%,-4%)}
+    70%{transform:translate(-4%,3%)}
+    80%{transform:translate(2%,1%)}
+    90%{transform:translate(3%,-3%)}
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.8rem 3rem;
+    mix-blend-mode: normal;
+  }
+  nav.scrolled { background: rgba(244,242,237,0.92); backdrop-filter: blur(12px); }
+  nav.on-dark { mix-blend-mode: normal; }
+  .nav-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--bg);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  nav.scrolled .nav-logo { color: var(--text); }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgba(244,242,237,0.75);
+    transition: color 0.3s;
+  }
+  nav.scrolled .nav-links a { color: var(--gray); }
+  .nav-links a:hover { color: var(--red); }
+  .nav-cart {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(244,242,237,0.75);
+    cursor: pointer;
+    transition: color 0.3s;
+    position: relative;
+  }
+  nav.scrolled .nav-cart { color: var(--text); }
+  .nav-cart:hover { color: var(--red); }
+  .cart-dot {
+    position: absolute;
+    top: -4px; right: -8px;
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    background: var(--blue);
+  }
+  .hero-photo {
+    position: absolute;
+    inset: 0;
+    background-image: url('hero-domino-hands.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    z-index: 1;
+  }
+  .hero-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(18,38,88,0.55) 0%, rgba(31,63,143,0.35) 40%, rgba(18,38,88,0.92) 100%);
+  }
+  .hero-canvas {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  /* Cinematic colmado scene built with CSS */
+  .hero-scene {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #1a0a02 0%, #0d1a26 40%, #1a0605 100%);
+  }
+
+  /* Street atmosphere elements */
+  .street-lights {
+    position: absolute;
+    inset: 0;
+  }
+  .light-source {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: lightpulse 4s ease-in-out infinite alternate;
+  }
+  .light-source:nth-child(1) { width: 300px; height: 300px; background: rgba(255,180,50,0.25); top: 10%; left: 5%; animation-delay: 0s; }
+  .light-source:nth-child(2) { width: 200px; height: 200px; background: rgba(179,38,30,0.2); top: 30%; right: 15%; animation-delay: 1s; }
+  .light-source:nth-child(3) { width: 400px; height: 250px; background: rgba(31,63,143,0.3); bottom: 20%; left: 30%; animation-delay: 2s; }
+  .light-source:nth-child(4) { width: 150px; height: 150px; background: rgba(255,220,100,0.15); top: 5%; right: 40%; animation-delay: 0.5s; }
+  @keyframes lightpulse { from { opacity: 0.6; } to { opacity: 1; } }
+
+  /* Architectural elements — colmado */
+  .colmado-structure {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65%;
+    display: flex;
+    align-items: flex-end;
+  }
+  .building {
+    position: absolute;
+    bottom: 0;
+    background: #0d0d0d;
+  }
+  .bld-1 { left: 0; width: 28%; height: 75%; background: linear-gradient(to top, #111 0%, #0a0a0a 100%); }
+  .bld-2 { left: 25%; width: 22%; height: 90%; background: linear-gradient(to top, #0e1218 0%, #090c10 100%); }
+  .bld-3 { right: 0; width: 35%; height: 70%; background: linear-gradient(to top, #120808 0%, #0d0505 100%); }
+
+  /* Windows / colmado lights */
+  .colmado-front {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 55%;
+    background: linear-gradient(to top, #1a0d02 0%, #0f0802 100%);
+    border-top: 2px solid rgba(255,160,30,0.15);
+  }
+  .win-grid {
+    position: absolute;
+    inset: 15% 10% 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 6px;
+  }
+  .win {
+    background: rgba(255,165,30,0.6);
+    border-radius: 1px;
+    animation: winflicker 3s ease-in-out infinite;
+    box-shadow: 0 0 12px rgba(255,165,30,0.5);
+  }
+  .win:nth-child(2) { animation-delay: 0.3s; background: rgba(255,140,20,0.4); }
+  .win:nth-child(3) { animation-delay: 0.7s; }
+  .win:nth-child(5) { background: transparent; }
+  .win:nth-child(7) { animation-delay: 1.2s; background: rgba(255,180,40,0.7); }
+  .win:nth-child(9) { animation-delay: 0.5s; background: rgba(179,38,30,0.4); }
+  .win:nth-child(11) { animation-delay: 1.8s; }
+  @keyframes winflicker { 0%,100%{opacity:1} 50%{opacity:0.75} 75%{opacity:0.9} }
+
+  /* Domino pattern on colmado front */
+  .colmado-sign {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    text-align: center;
+  }
+  .colmado-sign-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    color: rgba(255,165,30,0.6);
+    text-transform: uppercase;
+  }
+  .sign-line {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,165,30,0.2);
+    margin: 4px 0;
+  }
+
+  /* Palm silhouettes */
+  .palm {
+    position: absolute;
+    bottom: 45%;
+    width: 80px;
+    transform-origin: bottom center;
+    animation: sway 6s ease-in-out infinite alternate;
+  }
+  .palm-left { left: 8%; animation-delay: 0s; }
+  .palm-right { right: 12%; animation-delay: 2s; }
+  @keyframes sway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+  .palm-trunk {
+    width: 6px;
+    height: 100px;
+    background: linear-gradient(to top, #1a0d02, #2d1505);
+    margin: 0 auto;
+    transform: rotate(5deg);
+    border-radius: 3px;
+  }
+  .palm-right .palm-trunk { transform: rotate(-8deg); }
+  .palm-fronds {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .frond {
+    position: absolute;
+    width: 50px;
+    height: 8px;
+    background: linear-gradient(to right, #1a2a0d, transparent);
+    border-radius: 0 50% 50% 0;
+    transform-origin: left center;
+  }
+  .frond:nth-child(1) { transform: rotate(-60deg); }
+  .frond:nth-child(2) { transform: rotate(-30deg); }
+  .frond:nth-child(3) { transform: rotate(0deg); }
+  .frond:nth-child(4) { transform: rotate(30deg); }
+  .frond:nth-child(5) { transform: rotate(60deg); }
+  .frond:nth-child(6) { transform: rotate(90deg); left: -20px; width: 40px; }
+
+  /* Ground / street */
+  .street {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20%;
+    background: linear-gradient(to top, #080808 0%, #111 60%, transparent 100%);
+  }
+  .street-reflect {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 60%;
+    background: linear-gradient(to top, rgba(255,140,0,0.08) 0%, transparent 100%);
+  }
+
+  /* Domino table silhouette */
+  .domino-table {
+    position: absolute;
+    bottom: 12%;
+    left: 18%;
+    width: 120px;
+    height: 50px;
+  }
+  .table-top {
+    width: 100%;
+    height: 8px;
+    background: #1a1208;
+    border-radius: 2px;
+    position: absolute;
+    top: 0;
+  }
+  .table-legs {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+  }
+  .table-leg { width: 4px; background: #111; border-radius: 1px; }
+  .domino-pieces {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+  }
+  .dom-piece {
+    width: 10px;
+    height: 16px;
+    background: #f0e8d8;
+    border-radius: 1px;
+    box-shadow: 0 0 6px rgba(255,220,160,0.4);
+    position: relative;
+    opacity: 0.9;
+  }
+  .dom-piece::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 1px;
+    background: rgba(0,0,0,0.3);
+  }
+
+  /* Motorcycle silhouette */
+  .moto {
+    position: absolute;
+    bottom: 14%;
+    right: 22%;
+    width: 70px;
+    height: 35px;
+    opacity: 0.5;
+  }
+  .moto-body {
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    right: 10px;
+    height: 20px;
+    background: #1a1a1a;
+    border-radius: 8px 12px 4px 4px;
+    box-shadow: 0 0 8px rgba(255,100,0,0.2);
+  }
+  .moto-wheel {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 3px solid #222;
+    border-radius: 50%;
+    bottom: 0;
+  }
+  .moto-wheel.front { right: 0; }
+  .moto-wheel.rear { left: 0; }
+
+  /* Dark overlay for hero */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(18,38,88,0.3) 0%,
+      rgba(18,38,88,0.1) 40%,
+      rgba(18,38,88,0.5) 75%,
+      rgba(18,38,88,0.88) 100%
+    );
+  }
+
+  /* Domino grid lines — subtle graphic element */
+  .domino-grid-line {
+    position: absolute;
+    background: var(--red);
+    opacity: 0.25;
+  }
+  .dgl-h { height: 1px; left: 0; right: 0; }
+  .dgl-v { width: 1px; top: 0; bottom: 0; }
+
+  /* Hero content */
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    padding: 0 3rem 6rem;
+    width: 100%;
+  }
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(244,242,237,0.45);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--red);
+    display: block;
+  }
+  .hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: clamp(4rem, 12vw, 10rem);
+    line-height: 0.9;
+    color: var(--bg);
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    mix-blend-mode: normal;
+  }
+  .hero-title .accent-word { color: transparent; -webkit-text-stroke: 1.5px var(--bg); }
+  .hero-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .hero-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: rgba(244,242,237,0.5);
+    text-transform: uppercase;
+    max-width: 220px;
+    line-height: 1.6;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bg);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(244,242,237,0.3);
+    padding-bottom: 4px;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .hero-cta:hover { border-color: var(--red); color: var(--red); }
+  .hero-cta-arrow {
+    width: 20px; height: 1px;
+    background: currentColor;
+    position: relative;
+    transition: width 0.3s;
+  }
+  .hero-cta:hover .hero-cta-arrow { width: 30px; }
+  .hero-cta-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0; top: -3px;
+    width: 6px; height: 6px;
+    border-right: 1px solid currentColor;
+    border-top: 1px solid currentColor;
+    transform: rotate(45deg);
+  }
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 10;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: rgba(244,242,237,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(244,242,237,0.7);
+    animation: scrolldown 1.8s ease-in-out infinite;
+  }
+  @keyframes scrolldown { to { top: 200%; } }
+  .scroll-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: rgba(244,242,237,0.3);
+    text-transform: uppercase;
+    writing-mode: horizontal-tb;
+  }
+
+  /* ─── MARQUEE TICKER ─── */
+  .ticker {
+    background: var(--red);
+    color: var(--bg);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0.75rem 0;
+    border-top: 1px solid rgba(0,0,0,0.15);
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+  }
+  .ticker-inner {
+    display: inline-flex;
+    animation: ticker 28s linear infinite;
+  }
+  .ticker-item {
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 0 3rem;
+    color: rgba(244,242,237,0.6);
+  }
+  .ticker-dot {
+    color: var(--blue);
+    display: inline-block;
+    margin: 0 1rem;
+  }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ─── SECTION HEADER ─── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--light-gray);
+  }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--red);
+  }
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: clamp(2rem, 5vw, 4rem);
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .view-all {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray);
+    text-decoration: none;
+    border-bottom: 1px solid var(--light-gray);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .view-all:hover { color: var(--red); border-color: var(--red); }
+
+  /* ─── COLLECTION ─── */
+  #collection {
+    padding: 6rem 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .product-card {
+    position: relative;
+    cursor: none;
+    overflow: hidden;
+  }
+  .product-card:nth-child(1) { grid-column: span 4; }
+  .product-card:nth-child(2) { grid-column: span 4; }
+  .product-card:nth-child(3) { grid-column: span 4; }
+  .product-card .product-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .product-card .product-image img.product-img-front,
+  .product-card .product-image img.product-img-back {
+    transition: opacity 0.4s ease;
+  }
+  .product-card .product-image img.product-img-back {
+    opacity: 0;
+  }
+  .product-card:hover .product-image img.product-img-back { opacity: 1; }
+  .product-card:hover .product-image img.product-img-front { opacity: 0; }
+  .product-image.flipped img.product-img-back { opacity: 1; }
+  .product-image.flipped img.product-img-front { opacity: 0; }
+  .product-image { cursor: pointer; }
+  .product-image {
+    position: relative;
+    overflow: hidden;
+    background: #e8e4dc;
+    aspect-ratio: 3/4;
+  }
+  .product-image-inner {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.8s cubic-bezier(.25,.46,.45,.94);
+  }
+  .product-card:hover .product-image-inner { transform: scale(1.04); }
+
+  /* CSS-drawn product placeholders with streetwear aesthetic */
+  .product-visual {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Product 1 — oversized tee with domino graphic */
+  .pv-1 { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); }
+  .pv-1-tee {
+    width: 60%;
+    height: 70%;
+    background: #f0ece4;
+    clip-path: polygon(20% 0%, 80% 0%, 95% 10%, 100% 20%, 85% 100%, 15% 100%, 0% 20%, 5% 10%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pv-1-graphic {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--red);
+    line-height: 1;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+  .pv-1-sub { font-size: 0.7rem; letter-spacing: 0.3em; color: #1a1a1a; }
+
+  /* Product 2 — hoodie */
+  .pv-2 { background: linear-gradient(135deg, #1F3F8F 0%, #183273 100%); }
+  .pv-2-hoodie {
+    width: 55%;
+    height: 65%;
+    background: #1a1a1a;
+    clip-path: polygon(15% 0%, 50% 8%, 85% 0%, 100% 15%, 90% 100%, 10% 100%, 0% 15%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .pv-2-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 0.8rem;
+    color: rgba(244,242,237,0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .pv-2-stripe {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: var(--red);
+    top: 45%;
+  }
+
+  /* Product 3 — cargo pants */
+  .pv-3 { background: linear-gradient(135deg, #2a2a1a 0%, #1a1a0d 100%); }
+  .pv-3-pants {
+    width: 45%;
+    height: 70%;
+    position: relative;
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .pv-3-leg {
+    flex: 1;
+    height: 100%;
+    background: #4a4a32;
+    border-radius: 2px 2px 6px 6px;
+    position: relative;
+  }
+  .pv-3-leg::after {
+    content: '';
+    position: absolute;
+    right: -3px; top: 30%;
+    width: 12px; height: 18px;
+    background: #3a3a24;
+    border: 1px solid #5a5a40;
+    border-radius: 2px;
+  }
+  .pv-3-waist {
+    position: absolute;
+    top: 0; left: -8px; right: -8px;
+    height: 25px;
+    background: #3a3a24;
+    border-radius: 4px 4px 0 0;
+  }
+
+  /* Product 4 — jacket */
+  .pv-4 { background: linear-gradient(135deg, #f4ece0 0%, #e8dcd0 100%); }
+  .pv-4-jacket {
+    width: 55%;
+    height: 65%;
+    background: #B3261E;
+    clip-path: polygon(10% 0%, 40% 0%, 50% 8%, 60% 0%, 90% 0%, 100% 15%, 92% 100%, 8% 100%, 0% 15%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pv-4-line {
+    width: 1px;
+    height: 100%;
+    background: rgba(244,242,237,0.25);
+    position: absolute;
+    left: 50%;
+  }
+  .pv-4-chest-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: rgba(244,242,237,0.6);
+    text-transform: uppercase;
+  }
+
+  /* Product 5 — cap */
+  .pv-5 { background: linear-gradient(135deg, #111 0%, #1a1a1a 100%); }
+  .pv-5-cap {
+    width: 65%;
+    height: 55%;
+    position: relative;
+  }
+  .pv-5-crown {
+    position: absolute;
+    top: 0; left: 15%; right: 15%;
+    height: 70%;
+    background: #f4f2ed;
+    border-radius: 50% 50% 0 0;
+  }
+  .pv-5-brim {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 28%;
+    background: #e8e4dc;
+    border-radius: 0 0 4px 4px;
+    clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
+  }
+  .pv-5-logo {
+    position: absolute;
+    top: 22%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    white-space: nowrap;
+  }
+
+  .product-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,10,0);
+    transition: background 0.4s;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 2rem;
+  }
+  .product-card:hover .product-overlay { background: rgba(10,10,10,0.35); }
+  .product-quick-add {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bg);
+    border: 1px solid rgba(244,242,237,0.5);
+    padding: 0.7rem 1.5rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    cursor: none;
+    background: rgba(244,242,237,0.08);
+    backdrop-filter: blur(8px);
+  }
+  .product-card:hover .product-quick-add { opacity: 1; transform: translateY(0); }
+  .product-info {
+    padding: 1rem 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .product-name {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .product-price {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+  .shopify-buy-btn {
+    padding-top: 0.75rem;
+  }
+  .product-tag {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* NEW tag */
+  .new-tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 5;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--red);
+    color: white;
+    padding: 3px 8px;
+  }
+  .sold-tag {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 5;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--blue);
+    color: white;
+    padding: 3px 8px;
+  }
+
+  /* ─── EDITORIAL SECTION ─── */
+  #editorial {
+    background: var(--blue);
+    padding: 6rem 3rem;
+    color: var(--bg);
+    overflow: hidden;
+  }
+  #editorial .section-label { color: rgba(244,242,237,0.35); }
+  #editorial .section-title { color: var(--bg); }
+  #editorial .section-header { border-bottom-color: rgba(244,242,237,0.1); }
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+  .ed-block {
+    overflow: hidden;
+    position: relative;
+  }
+  .ed-block-1 { grid-column: span 7; grid-row: span 2; min-height: 600px; }
+  .ed-block-2 { grid-column: span 5; min-height: 290px; }
+  .ed-block-3 { grid-column: span 5; min-height: 290px; }
+  .ed-block-4 { grid-column: span 3; min-height: 400px; }
+  .ed-block-5 { grid-column: span 2; min-height: 400px; display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem 0; }
+
+  /* Editorial scene 1 — Santo Domingo street */
+  .ed-visual-1 {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #0a1520 0%, #1a0808 50%, #0a1018 100%);
+    overflow: hidden;
+  }
+  .ed-street-scene {
+    position: absolute;
+    inset: 0;
+  }
+  .ed-wall {
+    position: absolute;
+    left: 0; right: 40%;
+    top: 0; bottom: 0;
+    background: linear-gradient(to right, #1a1208 0%, #2a1a10 100%);
+  }
+  .ed-wall-texture {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent 0px, transparent 28px, rgba(0,0,0,0.15) 28px, rgba(0,0,0,0.15) 30px);
+  }
+  .ed-graffiti {
+    position: absolute;
+    top: 25%; left: 10%;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 5rem;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(179,38,30,0.4);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .ed-model-silhouette {
+    position: absolute;
+    right: 15%;
+    bottom: 0;
+    width: 180px;
+    height: 85%;
+    background: #0a0a0a;
+    clip-path: polygon(30% 0%, 70% 0%, 80% 5%, 85% 30%, 75% 50%, 80% 55%, 90% 100%, 10% 100%, 20% 55%, 25% 50%, 15% 30%, 20% 5%);
+    box-shadow: 0 0 40px rgba(255,140,0,0.1);
+  }
+  .ed-model-highlight {
+    position: absolute;
+    right: 15%;
+    bottom: 0;
+    width: 180px;
+    height: 85%;
+    background: linear-gradient(to right, transparent 40%, rgba(255,140,0,0.08) 100%);
+    clip-path: polygon(30% 0%, 70% 0%, 80% 5%, 85% 30%, 75% 50%, 80% 55%, 90% 100%, 10% 100%, 20% 55%, 25% 50%, 15% 30%, 20% 5%);
+  }
+  .ed-caption {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    z-index: 5;
+  }
+  .ed-caption-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    color: var(--bg);
+    letter-spacing: -0.02em;
+  }
+  .ed-caption-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(244,242,237,0.35);
+    margin-top: 0.5rem;
+  }
+
+  /* Editorial visual 2 — colmado exterior */
+  .ed-visual-2 {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #B3261E 0%, #8C1D17 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .ed-v2-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 8vw, 6rem);
+    color: rgba(244,242,237,0.12);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1;
+    text-align: center;
+    pointer-events: none;
+  }
+  .ed-v2-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  }
+  .ed-v2-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(244,242,237,0.5);
+    border-top: 1px solid rgba(244,242,237,0.2);
+    padding-top: 0.75rem;
+  }
+  .ed-v2-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    color: var(--bg);
+    margin-top: 4px;
+  }
+
+  /* Editorial visual 3 — domino close-up */
+  .ed-visual-3 {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1F3F8F 0%, #122658 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .ed-dom-layout {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 2rem;
+    width: 100%;
+    opacity: 0.7;
+  }
+  .ed-domino {
+    aspect-ratio: 1/2;
+    background: #f4f0e8;
+    border-radius: 3px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 6px;
+  }
+  .ed-domino::after {
+    content: '';
+    position: absolute;
+    left: 6px; right: 6px;
+    top: 50%;
+    height: 1px;
+    background: rgba(0,0,0,0.3);
+  }
+  .dom-dots-top, .dom-dots-bot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    justify-content: center;
+    width: 100%;
+  }
+  .dom-dot {
+    width: 4px; height: 4px;
+    background: var(--text);
+    border-radius: 50%;
+  }
+  .ed-v3-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 1.5rem;
+    background: linear-gradient(to top, rgba(7,30,51,0.9), transparent);
+  }
+
+
+  /* Editorial visual 3 — Filosofía del dominó */
+  .ed-filo { position: relative; height: 100%; min-height: 360px; padding: 1.8rem 1.6rem 1.5rem; display: flex; flex-direction: column; gap: 1.2rem;
+    background: linear-gradient(150deg, #1F3F8F 0%, #122658 100%); color: var(--bg); overflow: hidden; }
+  .ed-filo-label { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(244,242,237,0.55); display: flex; align-items: center; gap: .7rem; }
+  .ed-filo-label::before { content: ''; width: 20px; height: 1px; background: var(--red); }
+  .ed-filo-row { display: flex; justify-content: space-between; gap: 8px; perspective: 700px; }
+  .ef-tile { flex: 1; max-width: 62px; aspect-ratio: 1/2; position: relative; border: 0; padding: 0; background: none; cursor: pointer;
+    transform-style: preserve-3d; transition: transform .7s cubic-bezier(.34,1.4,.5,1); -webkit-tap-highlight-color: transparent; }
+  .ef-tile:hover { transform: translateY(-6px) rotate(-3deg); }
+  .ef-tile.on { transform: translateY(-10px) rotateY(180deg); }
+  .ef-face, .ef-back { position: absolute; inset: 0; border-radius: 12%/6%; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.35); }
+  .ef-face { background: #F2E6CC; display: grid; grid-template-rows: 1fr 1fr; }
+  .ef-face::after { content: ''; position: absolute; left: 16%; right: 16%; top: 50%; height: 2px; margin-top: -1px; background: rgba(31,63,143,0.55); }
+  .ef-half { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr); padding: 18%; place-items: center; }
+  .ef-half i { width: 70%; aspect-ratio: 1; border-radius: 50%; background: var(--blue); }
+  .ef-back { transform: rotateY(180deg); background: var(--red); display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: #F2E6CC; letter-spacing: .05em; }
+  .ed-filo-quote { margin: 0; flex: 1; display: flex; align-items: center; font-family: 'Montserrat', sans-serif; font-weight: 900; font-style: italic;
+    font-size: clamp(1.15rem, 2.1vw, 1.55rem); line-height: 1.2; letter-spacing: -0.01em; min-height: 3.8em; }
+  .ed-filo-quote span { display: block; transition: opacity .35s, transform .35s; }
+  .ed-filo-quote span.out { opacity: 0; transform: translateY(10px); }
+  .ed-filo-hint { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(244,242,237,0.4); }
+
+  /* ed-block-4 — text block */
+  .ed-block-text {
+    padding: 2.5rem;
+    background: #183273;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .ed-block-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: rgba(244,242,237,0.06);
+    line-height: 1;
+  }
+  .ed-block-quote {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    color: var(--bg);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .ed-block-attr {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  /* ed-block-5 */
+  .ed-block-5-content {
+    border-top: 1px solid rgba(244,242,237,0.1);
+    padding-top: 1.5rem;
+  }
+  .ed-block-5-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(244,242,237,0.3);
+    margin-bottom: 0.75rem;
+  }
+  .ed-block-5-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: var(--bg);
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .ed-block-5-link {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+    text-decoration: none;
+  }
+  .ed-block-5-link:hover { text-decoration: underline; }
+
+  /* ─── CULTURE SECTION ─── */
+  #culture {
+    padding: 8rem 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .culture-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+  .culture-text-side {}
+  .culture-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .culture-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--red); }
+  .culture-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 2.5rem;
+  }
+  .culture-heading .line-blue { color: var(--blue); }
+  .culture-body {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: #444;
+    margin-bottom: 2rem;
+    max-width: 480px;
+  }
+  .culture-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--light-gray);
+  }
+  .culture-stat-num {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 2.5rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  .culture-stat-num span { color: var(--red); }
+  .culture-stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-top: 0.3rem;
+  }
+
+  .culture-visual-side {
+    position: relative;
+  }
+  .culture-main-visual {
+    aspect-ratio: 4/5;
+    background: linear-gradient(145deg, #1F3F8F 0%, #122658 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Domino pattern visual */
+  .dom-pattern {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 2rem;
+    opacity: 0.15;
+    align-content: flex-start;
+  }
+  .dp-piece {
+    width: 28px; height: 50px;
+    background: var(--bg);
+    border-radius: 3px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .dp-piece::after {
+    content: '';
+    position: absolute;
+    left: 3px; right: 3px;
+    top: 50%;
+    height: 1px;
+    background: rgba(0,0,0,0.5);
+  }
+
+  /* Culture scene elements */
+  .culture-scene-el {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .culture-dom-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12rem;
+    color: rgba(244,242,237,0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .culture-person-silhouette {
+    position: absolute;
+    bottom: 0;
+    right: 10%;
+    width: 45%;
+    height: 80%;
+    background: rgba(244,242,237,0.03);
+    clip-path: polygon(35% 0%, 65% 0%, 75% 5%, 80% 25%, 70% 42%, 75% 50%, 88% 100%, 12% 100%, 25% 50%, 30% 42%, 20% 25%, 25% 5%);
+    border: 1px solid rgba(244,242,237,0.08);
+  }
+
+  .culture-overlay-text {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    color: var(--bg);
+  }
+  .cot-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .cot-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(244,242,237,0.35);
+  }
+
+  .culture-accent-block {
+    position: absolute;
+    bottom: -2rem;
+    left: -2rem;
+    width: 45%;
+    aspect-ratio: 1;
+    background: var(--red);
+    z-index: -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .cab-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+    color: rgba(244,242,237,0.2);
+    text-align: center;
+    padding: 1rem;
+    line-height: 1.3;
+  }
+  .culture-blue-line {
+    position: absolute;
+    top: 3rem;
+    right: -1rem;
+    width: 1px;
+    height: 40%;
+    background: var(--blue);
+    opacity: 0.4;
+  }
+
+  /* Symbols row */
+  .culture-symbols {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .culture-symbol {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .cs-icon {
+    width: 28px; height: 28px;
+    background: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--bg);
+    border-radius: 2px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.05em;
+  }
+  .cs-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  /* ─── NEWSLETTER / BAND ─── */
+  #newsletter {
+    background: #122658;
+    padding: 5rem 3rem;
+    color: var(--bg);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .nl-bg-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 15vw, 12rem);
+    color: rgba(244,242,237,0.03);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 0.05em;
+  }
+  .nl-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 1.5rem;
+  }
+  .nl-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 2.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .nl-form {
+    display: flex;
+    max-width: 460px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .nl-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(244,242,237,0.2);
+    padding: 0.9rem 0;
+    font-size: 0.8rem;
+    color: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.05em;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .nl-input::placeholder { color: rgba(244,242,237,0.25); }
+  .nl-input:focus { border-bottom-color: var(--red); }
+  .nl-btn {
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(244,242,237,0.2);
+    padding: 0.9rem 0 0.9rem 1.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    cursor: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.2s;
+  }
+  .nl-btn:hover { color: var(--bg); }
+  .nl-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: rgba(244,242,237,0.2);
+    margin-top: 1.5rem;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #122658;
+    border-top: 1px solid rgba(244,242,237,0.1);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  .footer-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--bg);
+    text-decoration: none;
+  }
+  .footer-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  .footer-location {
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(244,242,237,0.25);
+  }
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+  }
+  .footer-links a {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(244,242,237,0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--red); }
+  .footer-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+  .footer-ig {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(244,242,237,0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-ig:hover { color: var(--red); }
+  .footer-copy {
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(244,242,237,0.15);
+  }
+
+  /* Domino line decorators */
+  .dom-line-h {
+    height: 1px;
+    background: linear-gradient(to right, var(--red), transparent 30%, transparent 70%, var(--blue));
+    margin: 0;
+    opacity: 0.3;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s cubic-bezier(.25,.46,.45,.94), transform 0.9s cubic-bezier(.25,.46,.45,.94);
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  .fade-in-delay-1 { transition-delay: 0.1s; }
+  .fade-in-delay-2 { transition-delay: 0.2s; }
+  .fade-in-delay-3 { transition-delay: 0.35s; }
+  .fade-in-delay-4 { transition-delay: 0.5s; }
+  .fade-in-delay-5 { transition-delay: 0.65s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1100px) {
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .product-card:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+
+    .product-card:nth-child(2),
+    .product-card:nth-child(3),
+    .product-card:nth-child(4),
+    .product-card:nth-child(5),
+    .product-card:nth-child(6),
+    .product-card:nth-child(7) { grid-column: span 1; }
+    .editorial-grid { grid-template-columns: 1fr 1fr; }
+    .ed-block-1 { grid-column: span 2; }
+    .ed-block-2, .ed-block-3 { grid-column: span 1; }
+    .ed-block-4 { grid-column: span 1; }
+    .ed-block-5 { grid-column: span 1; }
+    .culture-layout { grid-template-columns: 1fr; gap: 4rem; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 1.5rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero-content { padding: 0 1.5rem 5rem; }
+    #collection, #editorial, #culture, #newsletter { padding: 4rem 1.5rem; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    .footer-right { align-items: flex-start; }
+    .products-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .product-card:nth-child(1) { grid-column: span 1; }
+    .editorial-grid { grid-template-columns: 1fr; }
+    .ed-block-1, .ed-block-2, .ed-block-3, .ed-block-4, .ed-block-5 { grid-column: span 1; }
+    .ed-block-1 { min-height: 450px; }
+    .culture-layout { grid-template-columns: 1fr; }
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+  }
+
+  /* ─── EL CLUB ─── */
+  #club { padding: 6rem 3rem; max-width: 1400px; margin: 0 auto; }
+  .club-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; align-items: start; }
+  .club-legend p { font-size: 1.05rem; line-height: 1.85; color: #333; margin-bottom: 1.2rem; }
+  .club-legend p:first-child::first-letter { font-family: 'Montserrat', sans-serif; font-weight: 900; font-style: italic; float: left; font-size: 4.2rem; line-height: 0.85; padding: 0.35rem 0.6rem 0 0; color: var(--red); }
+  .club-note { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray); border-top: 1px solid var(--light-gray); padding-top: 1rem; margin-top: 1.5rem; }
+  .club-people { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .club-person { border: 1px solid var(--light-gray); padding: 1.4rem; background: #fff; }
+  .club-person .role { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--red); }
+  .club-person h3 { font-family: 'Montserrat', sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase; font-size: 1.25rem; color: var(--blue); margin: 0.4rem 0 0.5rem; letter-spacing: -0.01em; }
+  .club-person p { font-size: 0.9rem; line-height: 1.6; color: #444; }
+  .club-rules { margin-top: 5rem; }
+  .club-rules ol { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0; counter-reset: art; border-top: 1px solid var(--light-gray); }
+  .club-rules li { counter-increment: art; display: grid; grid-template-columns: 5.5rem 1fr; align-items: baseline; gap: 1rem; padding: 1.3rem 0; border-bottom: 1px solid var(--light-gray); font-size: 1.05rem; color: var(--text); }
+  .club-rules li:nth-child(odd) { padding-right: 2rem; }
+  .club-rules li::before { content: 'ART. ' counter(art); font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.08em; color: var(--red); }
+
+  /* ─── SOCIOS ─── */
+  #socios { background: var(--blue); color: var(--bg); }
+  .socios-inner { max-width: 1400px; margin: 0 auto; padding: 6rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  #socios .section-label { color: rgba(244,242,237,0.6); }
+  .socios-num { font-family: 'Montserrat', sans-serif; font-weight: 900; font-style: italic; font-size: clamp(3rem, 8vw, 6.5rem); line-height: 0.9; letter-spacing: -0.03em; margin: 1rem 0 1.5rem; }
+  .socios-copy p { font-size: 1.05rem; line-height: 1.8; color: rgba(244,242,237,0.85); margin-bottom: 1rem; max-width: 34rem; }
+  .socios-cta { display: inline-block; margin-top: 1rem; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--bg); text-decoration: none; border: 1px solid rgba(244,242,237,0.5); padding: 1rem 1.6rem; transition: background 0.3s, color 0.3s; }
+  .socios-cta:hover { background: var(--bg); color: var(--blue); }
+  .carnet { width: 100%; max-width: 440px; aspect-ratio: 1.586; margin-left: auto; background: #183273; border: 2px solid var(--bg); border-radius: 18px; padding: 1.5rem 1.6rem; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; position: relative; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.35); transform: rotate(-3deg); }
+  .carnet-brand { font-family: 'Montserrat', sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase; font-size: 1.5rem; line-height: 1; }
+  .carnet-brand small { display: block; font-family: 'DM Sans', sans-serif; font-style: normal; font-weight: 400; font-size: 0.65rem; letter-spacing: 0.25em; color: #F6C915; margin-top: 0.4rem; }
+  .carnet-no { text-align: right; font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; line-height: 0.9; color: #fff; }
+  .carnet-no small { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.55rem; letter-spacing: 0.25em; color: rgba(244,242,237,0.8); margin-bottom: 0.3rem; }
+  .carnet-lines { grid-column: 1 / 3; align-self: end; }
+  .carnet-lines div { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(244,242,237,0.75); border-bottom: 1px solid rgba(244,242,237,0.45); padding: 1.1rem 0 0.3rem; }
+  .carnet-foot { grid-column: 1 / 3; display: flex; justify-content: space-between; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; margin-top: 0.9rem; color: rgba(244,242,237,0.8); }
+  .carnet-dom { position: absolute; right: -24px; bottom: -40px; width: 150px; opacity: 0.12; }
+
+  .socios-form { display: grid; gap: 0.9rem; max-width: 30rem; margin-top: 1.2rem; }
+  .sf-field { display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(244,242,237,0.7); }
+  .sf-field input { font-family: 'DM Sans', sans-serif; font-size: 1rem; letter-spacing: 0; text-transform: none; color: var(--bg); background: transparent; border: 0; border-bottom: 1px solid rgba(244,242,237,0.5); padding: 0.6rem 0; outline: none; min-height: 44px; }
+  .sf-field input::placeholder { color: rgba(244,242,237,0.4); }
+  .sf-field input:focus { border-bottom-color: var(--bg); }
+  .socios-form .socios-cta { background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; justify-self: start; min-height: 48px; }
+  .sf-ok { margin-top: 1.2rem; font-family: 'Montserrat', sans-serif; font-weight: 900; font-style: italic; font-size: 1.3rem; text-transform: uppercase; color: #F6C915; }
+  /* ─── EL PREGÓN (sin servicio de email todavía) ─── */
+  .nl-soon { display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 2rem; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; color: var(--bg); border: 1px solid rgba(244,242,237,0.4); padding: 1rem 1.6rem; position: relative; z-index: 1; }
+  .nl-soon:hover { background: var(--bg); color: var(--text); }
+  .nl-form[hidden], .socios-form[hidden] { display: none !important; }
+  .size-note { margin-top: 2rem; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); text-align: center; }
+
+  @media (max-width: 900px) {
+    #club { padding: 4rem 1.5rem; }
+    .club-grid, .socios-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .club-rules ol { grid-template-columns: 1fr; }
+    .club-rules li:nth-child(odd) { padding-right: 0; }
+    .socios-inner { padding: 4rem 1.5rem; }
+    .carnet { margin: 0 auto; }
+  }
+  @media (max-width: 520px) { .club-people { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- Grain overlay -->
+<div class="grain"></div>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ─── LOADER ─── -->
+<div id="loader" aria-hidden="true">
+  <div class="ld-panel ld-top"></div>
+  <div class="ld-panel ld-bot"></div>
+  <div class="ld-seam"></div>
+  <div class="ld-stage">
+    <div class="ld-row">
+      <span class="ld-slot" id="ldSlotA"></span>
+      <span class="ld-word" aria-label="Capicúa"><span>C</span><span>A</span><span>P</span><span>I</span><span>C</span><span>Ú</span><span>A</span></span>
+      <span class="ld-slot" id="ldSlotB"></span>
+      <div class="ld-ring"></div>
+      <div class="ld-tile">
+        <div class="ld-half a"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="ld-half b"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="ld-bar"></div>
+      </div>
+    </div>
+    <div class="ld-studio">Studio</div>
+    <div class="ld-cities"><span class="l">Santiago, DR</span><span class="ld-mid"><em></em><b></b><em></em></span><span class="r">New Jersey</span></div>
+  </div>
+  <div class="ld-hint">Toca pa' entrar</div>
+</div>
+
+<!-- ─── NAVIGATION ─── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Capicúa</a>
+  <ul class="nav-links">
+    <li><a href="#collection">Uniformes</a></li>
+    <li><a href="#club">El Club</a></li>
+    <li><a href="#socios">Socios</a></li>
+    <li><a href="#newsletter">El Pregón</a></li>
+  </ul>
+  <div class="nav-cart">Bag <span class="cart-dot"></span></div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-photo"></div>
+  <div class="hero-canvas">
+    <div class="hero-scene">
+      <!-- Lights -->
+      <div class="street-lights">
+        <div class="light-source"></div>
+        <div class="light-source"></div>
+        <div class="light-source"></div>
+        <div class="light-source"></div>
+      </div>
+
+      <!-- Buildings -->
+      <div class="colmado-structure">
+        <div class="building bld-1"></div>
+        <div class="building bld-2"></div>
+        <div class="building bld-3"></div>
+        <div class="colmado-front">
+          <div class="colmado-sign">
+            <div class="sign-line"></div>
+            <div class="colmado-sign-text">Colmado El Vecino</div>
+            <div class="sign-line"></div>
+          </div>
+          <div class="win-grid">
+            <div class="win"></div><div class="win"></div><div class="win"></div><div class="win"></div>
+            <div class="win"></div><div class="win"></div><div class="win"></div><div class="win"></div>
+            <div class="win"></div><div class="win"></div><div class="win"></div><div class="win"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Palms -->
+      <div class="palm palm-left">
+        <div class="palm-fronds">
+          <div class="frond"></div><div class="frond"></div><div class="frond"></div>
+          <div class="frond"></div><div class="frond"></div><div class="frond"></div>
+        </div>
+        <div class="palm-trunk"></div>
+      </div>
+      <div class="palm palm-right">
+        <div class="palm-fronds">
+          <div class="frond"></div><div class="frond"></div><div class="frond"></div>
+          <div class="frond"></div><div class="frond"></div><div class="frond"></div>
+        </div>
+        <div class="palm-trunk"></div>
+      </div>
+
+      <!-- Street elements -->
+      <div class="domino-table">
+        <div class="table-top"></div>
+        <div class="table-legs"><div class="table-leg"></div><div class="table-leg"></div></div>
+        <div class="domino-pieces">
+          <div class="dom-piece"></div><div class="dom-piece"></div>
+          <div class="dom-piece"></div><div class="dom-piece"></div>
+        </div>
+      </div>
+      <div class="moto">
+        <div class="moto-body"></div>
+        <div class="moto-wheel front"></div>
+        <div class="moto-wheel rear"></div>
+      </div>
+      <div class="street"><div class="street-reflect"></div></div>
+    </div>
+
+    <!-- Domino grid lines -->
+    <div class="domino-grid-line dgl-h" style="top:33%"></div>
+    <div class="domino-grid-line dgl-h" style="top:66%"></div>
+    <div class="domino-grid-line dgl-v" style="left:33%"></div>
+    <div class="domino-grid-line dgl-v" style="left:66%"></div>
+  </div>
+
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Drop 01 — Santiago / NJ</div>
+    <h1 class="hero-title">
+      Culture<br><span class="accent-word">Never</span><br>Folds
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-subtitle">Dominican streetwear rooted in colmado culture, dominoes & barrio life</p>
+      <a href="#collection" class="hero-cta">
+        Shop collection
+        <span class="hero-cta-arrow"></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <div class="scroll-line"></div>
+    <span class="scroll-label">Scroll</span>
+  </div>
+</section>
+
+<!-- ─── TICKER ─── -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker-inner">
+    <span class="ticker-item">Capicúa Studio <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Drop 01 <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Santiago, DR <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">New Jersey <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Culture Never Folds <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Streetwear & Identity <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Domino Philosophy <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Capicúa Studio <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Drop 01 <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Santiago, DR <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">New Jersey <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Culture Never Folds <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Streetwear & Identity <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Domino Philosophy <span class="ticker-dot">◆</span></span>
+  </div>
+</div>
+
+<!-- ─── COLLECTION ─── -->
+<section id="collection">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">Drop 01</div>
+      <h2 class="section-title">Uniformes<br>del Club</h2>
+    </div>
+    <a href="#" class="view-all">View All →</a>
+  </div>
+
+  <div class="products-grid">
+    <!-- Product 1 — Capicúa Logo Tee -->
+    <div class="product-card fade-in fade-in-delay-1">
+      <div class="new-tag">New</div>
+      <div class="product-image">
+        <img class="product-img-front" src="capicua-logo-tee-front.png" alt="Capicúa Logo Tee — front">
+        <img class="product-img-back" src="capicua-logo-tee-back.png" alt="Capicúa Logo Tee — back domino print">
+        <div class="product-overlay">
+          <div class="product-quick-add">Quick Add +</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div>
+          <div class="product-name">Capicúa Logo Tee</div>
+          <span class="product-tag">Uniforme de mesa</span>
+        </div>
+        <div class="product-price">$45</div>
+      </div>
+      <div id="product-component-1787007099579" class="shopify-buy-btn"></div>
+    </div>
+
+    <!-- Product 2 — La Guaguita -->
+    <div class="product-card fade-in fade-in-delay-2">
+      <div class="new-tag">New</div>
+      <div class="product-image">
+        <img class="product-img-front" src="la-guaguita-tee.png" alt="La Guaguita — front">
+        <img class="product-img-back" src="la-guaguita-back.png" alt="La Guaguita — back print flat lay">
+        <div class="product-overlay">
+          <div class="product-quick-add">Quick Add +</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div>
+          <div class="product-name">La Guaguita</div>
+          <span class="product-tag">Uniforme de ruta</span>
+        </div>
+        <div class="product-price">$45</div>
+      </div>
+      <div id="product-component-1787007377941" class="shopify-buy-btn"></div>
+    </div>
+
+    <!-- Product 3 — La Gallina -->
+    <div class="product-card fade-in fade-in-delay-3">
+      <div class="new-tag">New</div>
+      <div class="product-image">
+        <img class="product-img-front" src="la-gallina-front.png" alt="La Gallina — front">
+        <img class="product-img-back" src="la-gallina-back.png" alt="La Gallina — back illustration">
+        <div class="product-overlay">
+          <div class="product-quick-add">Quick Add +</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div>
+          <div class="product-name">La Gallina</div>
+          <span class="product-tag">Uniforme de la Presidencia</span>
+        </div>
+        <div class="product-price">$45</div>
+      </div>
+      <div id="product-component-1787872931055" class="shopify-buy-btn"></div>
+    </div>
+  </div>
+  <p class="size-note">Corte oversize · Tallas S, M y L · Si usas XL, pide L</p>
+</section>
+
+<div class="dom-line-h"></div>
+
+<!-- ─── EL CLUB ─── -->
+<section id="club">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">La Leyenda</div>
+      <h2 class="section-title">El Club</h2>
+    </div>
+    <span class="view-all" style="border:0">Sede principal: la esquina</span>
+  </div>
+  <div class="club-grid">
+    <div class="club-legend fade-in">
+      <p>Nadie sabe bien cuándo empezó el club. Dicen que fue en una esquina de Santiago, una tarde de calor, cuando alguien cerró la mano con un doble cinco que pegaba por los dos lados, y la mesa entera gritó «¡Capicúa!».</p>
+      <p>Desde ese día, cada vez que alguien se iba de la esquina —pa' Paterson, pa' Perth Amboy, pa'l mundo— se llevaba una ficha en el bolsillo. Pa' acordarse. Pa' volver.</p>
+      <p>El club no tiene paredes. Está donde haya una mesa, una bulla y alguien que diga «siéntate». Se lee igual de ida y de vuelta: allá y aquí, siempre el mismo club.</p>
+      <div class="club-note">Santiago · New Jersey · Abierto desde siempre</div>
+    </div>
+    <div class="club-people fade-in fade-in-delay-1">
+      <div class="club-person"><div class="role">Presidencia</div><h3>La Presidenta</h3><p>La gallina. Presidenta honoraria vitalicia. Nadie la votó, pero nadie se atreve a sacarla.</p></div>
+      <div class="club-person"><div class="role">Campeón de la mesa</div><h3>El Invicto</h3><p>Nadie le ha ganado. Cualquiera puede retarlo.</p></div>
+      <div class="club-person"><div class="role">Transporte oficial</div><h3>La Guaguitaaa</h3><p>Trae frutas, noticias y chismes de una esquina a la otra.</p></div>
+      <div class="club-person"><div class="role">La comunidad</div><h3>Los Socios</h3><p>Todo el que lleva la Capicúa puesta. Aquí no hay clientes: hay socios.</p></div>
+    </div>
+  </div>
+  <div class="club-rules fade-in">
+    <div class="section-header" style="margin-bottom:0;border-bottom:0">
+      <div><div class="section-label">Reglamento</div><h2 class="section-title" style="font-size:clamp(1.6rem,3.5vw,2.6rem)">Las reglas del club</h2></div>
+    </div>
+    <ol>
+      <li>Aquí no se fía… pero se juega.</li>
+      <li>Se saluda a todo el que llegue a la mesa.</li>
+      <li>Prohibido levantarse con la mano a medias.</li>
+      <li>La Presidenta no se cuestiona.</li>
+      <li>El que tranca, brinda el café.</li>
+      <li>Todo socio que sale de la esquina lleva su uniforme.</li>
+      <li>Se habla de allá y de aquí, pero nunca se olvida de dónde uno salió.</li>
+      <li>El que grita «¡Capicúa!» primero, gana la discusión.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ─── EDITORIAL ─── -->
+<section id="editorial">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">Campaign</div>
+      <h2 class="section-title">El Barrio<br>Editorial</h2>
+    </div>
+    <a href="#" class="view-all" style="color:rgba(244,242,237,0.35); border-color:rgba(244,242,237,0.1);">View All →</a>
+  </div>
+
+  <div class="editorial-grid">
+    <!-- Block 1 — La Guaguita colmado photo -->
+    <div class="ed-block ed-block-1 fade-in">
+      <div class="ed-visual-1">
+        <img src="editorial-la-guaguita.jpg" alt="La Guaguita — colmado" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(10,10,10,0.85) 100%);"></div>
+      </div>
+      <div class="ed-caption">
+        <div class="ed-caption-title">La Guaguitaaa</div>
+        <div class="ed-caption-sub">República Dominicana — Desde Siempre</div>
+      </div>
+    </div>
+
+    <!-- Block 2 — Capicúa Studio porch photo -->
+    <div class="ed-block ed-block-2 fade-in fade-in-delay-1">
+      <div class="ed-visual-2" style="position:relative;">
+        <img src="editorial-capicua-porch.jpg" alt="Capicúa Studio — worn" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,0.75) 0%,transparent 45%);"></div>
+        <div class="ed-v2-overlay">
+          <div class="ed-v2-label">Lookbook — Vol. I</div>
+          <div class="ed-v2-name">The Colmado Collection</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Block 3 — domino texture -->
+    <div class="ed-block ed-block-3 fade-in fade-in-delay-2">
+      <div class="ed-filo" id="edFilo">
+        <div class="ed-filo-label">El juego — Filosofía del dominó</div>
+        <div class="ed-filo-row" role="list"></div>
+        <blockquote class="ed-filo-quote" aria-live="polite"><span></span></blockquote>
+        <div class="ed-filo-hint">Toca una ficha</div>
+      </div>
+      
+    </div>
+
+    <!-- Block 4 — quote -->
+    <div class="ed-block ed-block-4 fade-in fade-in-delay-1">
+      <div class="ed-block-text">
+        <div class="ed-block-num">01</div>
+        <div>
+          <div class="ed-block-quote">«El club es el barrio.»</div>
+          <div class="ed-block-attr" style="margin-top:1rem;">— La Presidenta</div>
+        </div>
+        <a href="#club" style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(244,242,237,0.3);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#B3261E'" onmouseout="this.style.color='rgba(244,242,237,0.3)'">Lee la leyenda →</a>
+      </div>
+    </div>
+
+    <!-- Block 5 -->
+    <div class="ed-block ed-block-5 fade-in fade-in-delay-2">
+      <div class="ed-block-5-content">
+        <div class="ed-block-5-label">Campaña</div>
+        <div class="ed-block-5-title">Drop<br>01</div>
+        <a href="#collection" class="ed-block-5-link">Ver uniformes →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="dom-line-h"></div>
+
+<!-- ─── CULTURE ─── -->
+<section id="culture">
+  <div class="culture-layout">
+    <div class="culture-text-side fade-in">
+      <div class="culture-eyebrow">Cultura</div>
+      <h2 class="culture-heading">
+        Born in the<br>
+        <span class="line-blue">Barrio.</span><br>
+        Built for<br>the World.
+      </h2>
+      <p class="culture-body">
+        Capicúa Studio is more than clothing. It's a love letter to the Dominican street — the colmado where neighbors congregate, the domino table where battles are fought with tiles and wit, the motoconcho winding through Santiago's calles, the reggaeton echoing off concrete walls.
+      </p>
+      <p class="culture-body">
+        We are the intersection of barrio culture and fashion-forward vision. Every piece carries the weight of Dominican identity — the resilience, warmth, and creative genius of a people who turned nothing into something extraordinary.
+      </p>
+
+      <div class="culture-symbols">
+        <div class="culture-symbol">
+          <div class="cs-icon">6•2</div>
+          <span class="cs-label">Dominoes</span>
+        </div>
+        <div class="culture-symbol">
+          <div class="cs-icon">♪</div>
+          <span class="cs-label">Música</span>
+        </div>
+        <div class="culture-symbol">
+          <div class="cs-icon">DR</div>
+          <span class="cs-label">Roots</span>
+        </div>
+        <div class="culture-symbol">
+          <div class="cs-icon">NJ</div>
+          <span class="cs-label">Diaspora</span>
+        </div>
+      </div>
+
+      <div class="culture-stats">
+        <div>
+          <div class="culture-stat-num">1<span>°</span></div>
+          <div class="culture-stat-label">Generation DR</div>
+        </div>
+        <div>
+          <div class="culture-stat-num">2</div>
+          <div class="culture-stat-label">Cities, One Vision</div>
+        </div>
+        <div>
+          <div class="culture-stat-num">∞</div>
+          <div class="culture-stat-label">Culture to Share</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="culture-visual-side fade-in fade-in-delay-2">
+      <div class="culture-main-visual">
+        <div class="dom-pattern">
+          <!-- Domino tiles pattern -->
+          <script>document.addEventListener('DOMContentLoaded',()=>{const c=document.querySelector('.dom-pattern');for(let i=0;i<40;i++){const d=document.createElement('div');d.className='dp-piece';c.appendChild(d);}});</script>
+        </div>
+        <div class="culture-scene-el">
+          <div class="culture-dom-big">≡</div>
+        </div>
+        <div class="culture-person-silhouette"></div>
+        <div class="culture-overlay-text">
+          <div class="cot-title">De la esquina pa'l mundo</div>
+          <div class="cot-sub">Santiago · Paterson · Perth Amboy · Passaic</div>
+        </div>
+      </div>
+      <div class="culture-accent-block">
+        <div class="cab-text">COLMADO<br>CULTURE<br>CAPICÚA</div>
+      </div>
+      <div class="culture-blue-line"></div>
+    </div>
+  </div>
+</section>
+
+<div class="dom-line-h"></div>
+
+<!-- ─── NEWSLETTER ─── -->
+<!-- ─── SOCIOS FUNDADORES ─── -->
+<section id="socios">
+  <div class="socios-inner">
+    <div class="socios-copy fade-in">
+      <div class="section-label">Socios Fundadores</div>
+      <div class="socios-num">#001 — #100</div>
+      <p>Solo hay 100. Los primeros 100 en comprar son socios fundadores, por orden de compra, con su número pa' siempre.</p>
+      <p>Cada socio recibe su carnet digital pa' guardarlo en el teléfono y el carnet físico dentro del pedido.</p>
+      <p>Apúntate a la lista y te avisamos primero cuando abra el drop.</p>
+      <form class="socios-form" action="https://formsubmit.co/capicuastudio2025@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Nuevo socio fundador · Capicúa Social Club">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="https://capicua-studio.vercel.app/#gracias">
+        <input type="hidden" name="_autoresponse" value="¡Bienvenido a la lista de socios fundadores de Capicúa Social Club! Solo hay 100 números y se asignan por orden de compra. Te avisamos primero cuando abra el drop. Cada socio fundador recibe su carnet digital pa' guardarlo en el teléfono y su carnet físico dentro del pedido. Síguenos en @capicua.studio — De la esquina pa'l mundo.">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <label class="sf-field"><span>Nombre</span><input type="text" name="nombre" autocomplete="name" placeholder="Tu nombre"></label>
+        <label class="sf-field"><span>Email</span><input type="email" name="email" required autocomplete="email" placeholder="tu@email.com"></label>
+        <button type="submit" class="socios-cta">Quiero ser socio →</button>
+      </form>
+      <p class="sf-ok" id="gracias" hidden>¡Ya estás en la lista del club! Te escribimos pronto. Bienvenido, socio.</p>
+    </div>
+    <div class="fade-in fade-in-delay-1">
+      <div class="carnet" role="img" aria-label="Carnet de socio fundador de Capicúa Social Club">
+        <svg class="carnet-dom" viewBox="0 0 60 116" aria-hidden="true"><rect x="2" y="2" width="56" height="112" rx="9" fill="none" stroke="#F4F2ED" stroke-width="4"></rect><line x1="10" y1="58" x2="50" y2="58" stroke="#F4F2ED" stroke-width="3"></line></svg>
+        <div class="carnet-brand">Capicúa<small>Social Club</small></div>
+        <div class="carnet-no"><small>Socio fundador</small>#001</div>
+        <div class="carnet-lines"><div>Nombre del socio</div><div>Esquina de origen</div></div>
+        <div class="carnet-foot"><span>Santiago · New Jersey</span><span>@capicua.studio</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="newsletter">
+  <div class="nl-bg-text">CAPICÚA</div>
+  <div class="nl-eyebrow">El Pregón del Club</div>
+  <h2 class="nl-title">¡Llegó el Pregón!<br>Drops, socios y cultura</h2>
+  <form class="nl-form" action="https://formsubmit.co/capicuastudio2025@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="Nuevo suscriptor de El Pregón · Capicúa Social Club">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://capicua-studio.vercel.app/#pregon-gracias">
+    <input type="hidden" name="lista" value="El Pregón">
+    <input type="hidden" name="_autoresponse" value="¡Llegó el Pregón! Ya estás suscrito a El Pregón del Club de Capicúa Studio Social Club. Una vez al mes te llega: los drops antes que nadie, comunicados de la Presidenta, el Socio del Mes y noticias de Santiago y New Jersey. Mientras tanto, síguenos en Instagram: @capicua.studio — De la esquina pa'l mundo.">
+    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <input type="email" name="email" class="nl-input" required autocomplete="email" placeholder="Tu email" aria-label="Tu email">
+    <button type="submit" class="nl-btn">Suscribirme</button>
+  </form>
+  <p class="nl-sub" id="pregon-gracias-msg">Un email al mes. Te enteras primero de los drops.</p>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <a href="#" class="footer-logo">Capicúa</a>
+  <div class="footer-center">
+    <div class="footer-location">Santiago, Dominican Republic / Paterson, New Jersey</div>
+    <div class="footer-links">
+      <a href="#collection">Uniformes</a>
+      <a href="#club">El Club</a>
+      <a href="#editorial">Editorial</a>
+      <a href="#culture">Culture</a>
+      <a href="#newsletter">El Pregón</a>
+    </div>
+  </div>
+  <div class="footer-right">
+    <a href="https://instagram.com/capicua.studio" target="_blank" rel="noopener" class="footer-ig">@capicua.studio</a>
+    <div class="footer-copy">© <span id="yr">2026</span> Capicúa Studio. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// ─── LOADER · INTRO CAPICÚA ───
+(() => {
+  const L = document.getElementById('loader');
+  if (!L) return;
+  const $ = s => L.querySelector(s), $$ = s => [...L.querySelectorAll(s)];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let seen = false; try { seen = sessionStorage.getItem('capicuaIntro') === '1'; } catch (e) {}
+  let done = false, skipped = false;
+  const wait = ms => new Promise(r => setTimeout(r, skipped ? 0 : ms));
+  const anim = (el, kf, o) => el.animate(kf, Object.assign({ fill: 'forwards' }, o)).finished.catch(() => {});
+  const ease = { out: 'cubic-bezier(.16,1,.3,1)', back: 'cubic-bezier(.34,1.56,.64,1)', inout: 'cubic-bezier(.77,0,.18,1)', drop: 'cubic-bezier(.55,0,1,.45)' };
+
+  function finish() {
+    if (done) return; done = true;
+    try { sessionStorage.setItem('capicuaIntro', '1'); } catch (e) {}
+    const seam = $('.ld-seam');
+    anim($('.ld-stage'), [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(1.06)' }], { duration: 260, easing: 'ease-in' });
+    anim(seam, [{ transform: 'scaleX(0)', opacity: 1 }, { transform: 'scaleX(1)', opacity: 1 }], { duration: 300, delay: 120, easing: ease.out })
+      .then(() => anim(seam, [{ opacity: 1 }, { opacity: 0 }], { duration: 250, delay: 120 }));
+    anim($('.ld-top'), [{ transform: 'translateY(0)' }, { transform: 'translateY(-101%)' }], { duration: 900, delay: 380, easing: ease.inout });
+    anim($('.ld-bot'), [{ transform: 'translateY(0)' }, { transform: 'translateY(101%)' }], { duration: 900, delay: 380, easing: ease.inout })
+      .then(() => L.classList.add('hidden'));
+  }
+
+  async function play() {
+    const stage = $('.ld-stage'), tile = $('.ld-tile'), ring = $('.ld-ring');
+    const A = $('.ld-half.a'), B = $('.ld-half.b'), bar = $('.ld-bar');
+    const letters = $$('.ld-word span');
+    if (reduce || seen) {
+      letters.forEach(s => s.style.opacity = 1);
+      $('.ld-studio').style.opacity = 1; $('.ld-cities .l').style.opacity = 1; $('.ld-cities .r').style.opacity = 1;
+      $('.ld-mid b').style.transform = 'none'; tile.style.display = 'none';
+      await wait(seen ? 500 : 1200); return finish();
+    }
+    setTimeout(() => L.classList.add('can-skip'), 900);
+
+    // 1 · la ficha cae a la mesa
+    tile.style.opacity = 1;
+    await anim(tile, [
+      { transform: 'translateY(-75vh) rotate(-28deg) scale(1.15)' },
+      { transform: 'translateY(0) rotate(4deg) scale(1)', offset: 0.82 },
+      { transform: 'translateY(-4%) rotate(-1.5deg) scale(1)', offset: 0.92 },
+      { transform: 'translateY(0) rotate(0deg) scale(1)' }
+    ], { duration: 720, easing: ease.drop });
+    // ¡pá! temblor + onda
+    anim(stage, [{ transform: 'translate(0,0)' }, { transform: 'translate(-6px,4px)' }, { transform: 'translate(5px,-3px)' }, { transform: 'translate(-3px,2px)' }, { transform: 'translate(0,0)' }], { duration: 260, easing: 'linear' });
+    anim(ring, [{ opacity: 0.7, transform: 'scale(0.4)' }, { opacity: 0, transform: 'scale(1.6)' }], { duration: 650, easing: ease.out });
+
+    // 2 · se cuentan los puntos: doble seis
+    const pips = [...A.querySelectorAll('i'), ...B.querySelectorAll('i')];
+    pips.forEach((p, k) => anim(p, [{ transform: 'scale(0)' }, { transform: 'scale(1.35)', offset: 0.6 }, { transform: 'scale(1)' }], { duration: 300, delay: 120 + k * 45, easing: ease.out }));
+    await wait(120 + pips.length * 45 + 320);
+
+    // 3 · la ficha se abre en dos y sale la palabra
+    const move = (half, slot, rot) => {
+      const h = half.getBoundingClientRect(), s = slot.getBoundingClientRect();
+      const dx = s.left - h.left, dy = s.top - h.top;
+      return anim(half, [{ transform: 'translate(0,0) rotate(0deg)' }, { transform: `translate(${dx}px,${dy}px) rotate(${rot}deg)`, borderRadius: '16%' }], { duration: 760, easing: ease.inout });
+    };
+    anim(bar, [{ opacity: 1 }, { opacity: 0 }], { duration: 160 });
+    move(A, $('#ldSlotA'), -180); move(B, $('#ldSlotB'), 180);
+    await wait(260);
+    letters.forEach((s, k) => {
+      const r = (k % 2 ? 1 : -1) * (6 + k * 2);
+      anim(s, [
+        { opacity: 0, transform: `translateY(-55%) scale(1.7) rotate(${r}deg)`, filter: 'blur(6px)' },
+        { opacity: 1, transform: 'translateY(0) scale(1) rotate(0deg)', filter: 'blur(0)' }
+      ], { duration: 420, delay: k * 62, easing: ease.back });
+    });
+    await wait(letters.length * 62 + 380);
+    $$('.ld-half').forEach(h => anim(h, [{ filter: 'brightness(1)' }, { filter: 'brightness(1.25)' }, { filter: 'brightness(1)' }], { duration: 420 }));
+
+    // 4 · STUDIO + de ida y de vuelta
+    anim($('.ld-studio'), [{ opacity: 0, letterSpacing: '1.6em' }, { opacity: 1, letterSpacing: '0.9em' }], { duration: 700, easing: ease.out });
+    await wait(200);
+    anim($('.ld-cities .l'), [{ opacity: 0, transform: 'translateX(-40px)' }, { opacity: 1, transform: 'none' }], { duration: 650, easing: ease.out });
+    anim($('.ld-cities .r'), [{ opacity: 0, transform: 'translateX(40px)' }, { opacity: 1, transform: 'none' }], { duration: 650, easing: ease.out });
+    anim($('.ld-mid b'), [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 700, delay: 250, easing: ease.inout });
+    $$('.ld-mid em').forEach(e => anim(e, [{ opacity: 0, transform: 'scale(0)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 300, delay: 850, easing: ease.back }));
+    await wait(1300);
+    finish();
+  }
+
+  L.addEventListener('click', () => { if (!done) { skipped = true; L.getAnimations({ subtree: true }).forEach(a => a.finish()); finish(); } });
+  const start = () => (document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1200))]) : Promise.resolve()).then(play);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+  setTimeout(finish, 9000); // seguro: nunca se queda pegado
+})();
+
+
+try{document.getElementById('yr').textContent=new Date().getFullYear();}catch(e){}
+// ─── FILOSOFÍA DEL DOMINÓ ───
+(() => {
+  const box = document.getElementById('edFilo'); if (!box) return;
+  const F = [
+    [[6,6], 'Nadie gana solo: en la mesa se juega en pareja.'],
+    [[3,5], 'La ficha que guardas es la que te tranca.'],
+    [[4,2], 'Piénsala antes de ponerla, pero ponla duro.'],
+    [[1,4], 'El que cuenta las fichas, cuenta la historia.'],
+    [[5,5], 'Capicúa: ganar por los dos lados.']
+  ];
+  const P = {0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+  const half = n => '<div class="ef-half">' + Array.from({length:9},(_,k)=> P[n].includes(k)?'<i></i>':'<span></span>').join('') + '</div>';
+  const row = box.querySelector('.ed-filo-row'), q = box.querySelector('.ed-filo-quote span'), hint = box.querySelector('.ed-filo-hint');
+  row.innerHTML = F.map(([v],k)=>`<button class="ef-tile" role="listitem" aria-label="Ficha ${v[0]} y ${v[1]}"><span class="ef-face">${half(v[0])}${half(v[1])}</span><span class="ef-back">0${k+1}</span></button>`).join('');
+  const tiles = [...row.children];
+  let cur = -1, auto = true, timer;
+  const show = k => {
+    if (k === cur) return; cur = k;
+    tiles.forEach((t,i)=>t.classList.toggle('on', i===k));
+    q.classList.add('out');
+    setTimeout(()=>{ q.textContent = '«' + F[k][1] + '»'; q.classList.remove('out'); }, 300);
+  };
+  tiles.forEach((t,k)=>t.addEventListener('click',()=>{ auto=false; clearInterval(timer); hint.textContent = (k+1)+' de '+F.length+' · toca otra'; show(k); }));
+  show(0);
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+    timer = setInterval(()=>{ if (auto) show((cur+1)%F.length); }, 4200);
+})();
+
+// ─── CURSOR ───
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+// Lag the ring
+function animateCursor() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+
+// Tap/click to flip product images between front and back
+document.querySelectorAll('.product-image').forEach(img => {
+  if (img.querySelector('.product-img-back')) {
+    img.addEventListener('click', () => {
+      img.classList.toggle('flipped');
+    });
+  }
+});
+animateCursor();
+
+// Hover states
+const hoverEls = document.querySelectorAll('a, button, .product-card, .nav-cart');
+hoverEls.forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '6px';
+    cursor.style.height = '6px';
+    cursor.style.background = '#B3261E';
+    ring.style.width = '50px';
+    ring.style.height = '50px';
+    ring.style.borderColor = '#B3261E';
+    ring.style.opacity = '0.4';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '10px';
+    cursor.style.height = '10px';
+    cursor.style.background = '#111';
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+    ring.style.borderColor = '#111';
+    ring.style.opacity = '0.6';
+  });
+});
+
+// ─── NAV SCROLL ───
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 80) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+
+// ─── INTERSECTION OBSERVER — fade-in ───
+const faders = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+faders.forEach(el => observer.observe(el));
+
+// ─── DOMINO PATTERN ───
+const domPattern = document.querySelector('.dom-pattern');
+if (domPattern && domPattern.children.length === 0) {
+  for (let i = 0; i < 40; i++) {
+    const d = document.createElement('div');
+    d.className = 'dp-piece';
+    domPattern.appendChild(d);
+  }
+}
+
+// ─── NEWSLETTER FORM ───
+// ─── EL PREGÓN: el formulario se envía de verdad (FormSubmit → Gmail) ───
+if (location.hash === '#pregon-gracias') {
+  const nf = document.querySelector('#newsletter .nl-form');
+  const nm = document.getElementById('pregon-gracias-msg');
+  if (nf) nf.hidden = true;
+  if (nm) { nm.textContent = '¡Ya estás en El Pregón! Te llega el próximo. Bienvenido al club.'; nm.style.color = '#F6C915'; nm.style.fontSize = '1rem'; }
+  const sec = document.getElementById('newsletter'); if (sec) setTimeout(() => sec.scrollIntoView(), 300);
+}
+
+// ─── PARALLAX HERO ───
+window.addEventListener('scroll', () => {
+  const hero = document.getElementById('hero');
+  const scrolled = window.scrollY;
+  if (scrolled < window.innerHeight) {
+    const scene = hero.querySelector('.hero-scene');
+    if (scene) scene.style.transform = `translateY(${scrolled * 0.3}px)`;
+  }
+});
+</script>
+
+<!-- ─── SHOPIFY BUY BUTTONS ─── -->
+<script type="text/javascript">
+/*<![CDATA[*/
+(function () {
+  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+  if (window.ShopifyBuy) {
+    if (window.ShopifyBuy.UI) {
+      ShopifyBuyInit();
+    } else {
+      loadScript();
+    }
+  } else {
+    loadScript();
+  }
+  function loadScript() {
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = scriptURL;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+    script.onload = ShopifyBuyInit;
+  }
+  function ShopifyBuyInit() {
+    var client = ShopifyBuy.buildClient({
+      domain: 'frr6ap-5h.myshopify.com',
+      storefrontAccessToken: '99d70995ff0eb7c8f7c7521bb08dcbab',
+    });
+    var sharedOptions = {
+      "product": {
+        "contents": {
+          "img": false,
+          "title": false,
+          "price": false,
+          "description": false,
+          "buttonWithQuantity": false,
+          "button": true,
+          "quantity": false
+        },
+        "styles": {
+          "product": {
+            "@media (min-width: 601px)": {
+              "max-width": "100%",
+              "margin-left": "0",
+              "margin-bottom": "0"
+            }
+          },
+          "button": {
+            "font-family": "Montserrat, sans-serif",
+            "font-size": "12px",
+            "font-weight": "700",
+            "letter-spacing": "0.08em",
+            "text-transform": "uppercase",
+            "padding-top": "14px",
+            "padding-bottom": "14px",
+            "color": "#F4F2ED",
+            ":hover": {
+              "color": "#F4F2ED",
+              "background-color": "#8C1D17"
+            },
+            "background-color": "#B3261E",
+            ":focus": {
+              "background-color": "#8C1D17"
+            },
+            "border-radius": "0px"
+          }
+        },
+        "text": {
+          "button": "Add to Cart"
+        }
+      },
+      "modalProduct": {
+        "contents": {
+          "img": false,
+          "imgWithCarousel": true,
+          "button": false,
+          "buttonWithQuantity": true
+        },
+        "styles": {
+          "product": {
+            "@media (min-width: 601px)": {
+              "max-width": "100%",
+              "margin-left": "0",
+              "margin-bottom": "0"
+            }
+          },
+          "button": {
+            "font-family": "Montserrat, sans-serif",
+            "font-weight": "700",
+            "color": "#F4F2ED",
+            ":hover": {
+              "color": "#F4F2ED",
+              "background-color": "#8C1D17"
+            },
+            "background-color": "#B3261E",
+            ":focus": {
+              "background-color": "#8C1D17"
+            },
+            "border-radius": "0px"
+          }
+        },
+        "text": {
+          "button": "Add to Cart"
+        }
+      },
+      "option": {},
+      "cart": {
+        "styles": {
+          "button": {
+            "font-family": "Montserrat, sans-serif",
+            "font-weight": "700",
+            "color": "#F4F2ED",
+            ":hover": {
+              "color": "#F4F2ED",
+              "background-color": "#8C1D17"
+            },
+            "background-color": "#B3261E",
+            ":focus": {
+              "background-color": "#8C1D17"
+            },
+            "border-radius": "0px"
+          }
+        },
+        "text": {
+          "total": "Subtotal",
+          "button": "Checkout"
+        }
+      },
+      "toggle": {
+        "styles": {
+          "toggle": {
+            "background-color": "#B3261E",
+            ":hover": {
+              "background-color": "#8C1D17"
+            },
+            ":focus": {
+              "background-color": "#8C1D17"
+            }
+          }
+        }
+      }
+    };
+    ShopifyBuy.UI.onReady(client).then(function (ui) {
+      ui.createComponent('product', {
+        id: '9639414661375',
+        node: document.getElementById('product-component-1787007099579'),
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: sharedOptions,
+      });
+      ui.createComponent('product', {
+        id: '9639415283967',
+        node: document.getElementById('product-component-1787007377941'),
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: sharedOptions,
+      });
+      ui.createComponent('product', {
+        id: '9653939568895',
+        node: document.getElementById('product-component-1787872931055'),
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: sharedOptions,
+      });
+    });
+  }
+})();
+/*]]>*/
+
+// ─── SOCIOS: mensaje de gracias al volver del formulario ───
+if (location.hash === '#gracias') {
+  const ok = document.getElementById('gracias');
+  const f = document.querySelector('.socios-form');
+  if (ok) { ok.hidden = false; if (f) f.hidden = true; const sec = document.getElementById('socios'); if (sec) setTimeout(() => sec.scrollIntoView(), 300); }
+}
+</script>
+</body>
+</html>
